@@ -46,3 +46,10 @@ rm -rf $RPM_BUILD_ROOT
 %postun
 
 %files
+%defattr(644,root,root,755)
+%doc AUTHORS README* THANKS TODO
+
+%{py_sitescriptdir}/%{module}
+%if "%{py_ver}" > "2.4"
+%{py_sitescriptdir}/%{module}-*.egg-info
+%endif
