@@ -1,6 +1,5 @@
 %define 	module	kombu
 Summary:	AMQP Messaging Framework for Python
-Summary(pl.UTF-8):	-
 Name:		python-%{module}
 Version:	1.1.3
 Release:	0.1
@@ -12,12 +11,17 @@ URL:		-
 BuildRequires:	python-distribute
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.219
+Requires:	python-amqplib >= 0.6
+Requires:	python-anyjson >= 0.3.1
 Requires:	python-modules
 Requires:	python-pyparsing
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
+The aim of Kombu is to make messaging in Python as easy as possible by
+providing an idiomatic high-level interface for the AMQP protocol, and
+also provide proven and tested solutions to common messaging problems.
 
 %prep
 %setup -q -n %{module}-%{version}
@@ -37,17 +41,9 @@ rm -rf $RPM_BUILD_ROOT
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%pre
-
-%preun
-
-%post
-
-%postun
-
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS README* THANKS TODO
+%doc AUTHORS Changelog FAQ README THANKS TODO
 
 %{py_sitescriptdir}/%{module}
 %if "%{py_ver}" > "2.4"
