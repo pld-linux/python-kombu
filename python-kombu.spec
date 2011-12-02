@@ -1,12 +1,12 @@
 %define 	module	kombu
 Summary:	AMQP Messaging Framework for Python
 Name:		python-%{module}
-Version:	1.1.3
+Version:	1.5.1
 Release:	0.1
 License:	BSD-like
 Group:		Development/Languages/Python
 Source0:	http://pypi.python.org/packages/source/k/%{module}/%{module}-%{version}.tar.gz
-# Source0-md5:	7d9d15058454ae2d1f6212cedb1efbc9
+# Source0-md5:	50662f3c7e9395b3d0721fb75d100b63
 URL:		-
 BuildRequires:	python-distribute
 BuildRequires:	rpm-pythonprov
