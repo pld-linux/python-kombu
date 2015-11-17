@@ -22,7 +22,7 @@ BuildRequires:	rpmbuild(macros) >= 1.612
 BuildRequires:	python-setuptools
 %if %{with tests}
 BuildRequires:	python-mock
-BuildRequires:	python-modules > 1:2.7
+BuildRequires:	python-modules >= 1:2.7
 BuildRequires:	python-nose
 %endif
 %if %{with doc}
