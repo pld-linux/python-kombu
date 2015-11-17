@@ -1,7 +1,7 @@
 #
 # Conditional build:
 %bcond_without	doc	# don't build doc
-%bcond_with	tests	# do perform "make test"
+%bcond_with	tests	# do perform tests
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
 
@@ -14,6 +14,7 @@ License:	BSD-like
 Group:		Development/Languages/Python
 Source0:	http://pypi.python.org/packages/source/k/%{module}/%{module}-%{version}.tar.gz
 # Source0-md5:	892bf89ee247c0d16d2bdd63f1ddf4c5
+Patch0:		unittest2.patch
 URL:		http://pypi.python.org/pypi/kombu
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.612
@@ -21,7 +22,7 @@ BuildRequires:	rpmbuild(macros) >= 1.612
 BuildRequires:	python-setuptools
 %if %{with tests}
 BuildRequires:	python-mock
-BuildRequires:	python-modules
+BuildRequires:	python-modules > 1:2.7
 BuildRequires:	python-nose
 %endif
 %if %{with doc}
@@ -35,7 +36,6 @@ BuildRequires:	python3-setuptools
 %if %{with tests}
 BuildRequires:	python3-mock
 BuildRequires:	python3-nose
-BuildRequires:	python3-unittest2
 %endif
 %endif
 Requires:	python-amqp >= 1.4.7
@@ -71,6 +71,8 @@ Dokumentacja API %{module}.
 
 %prep
 %setup -q -n %{module}-%{version}
+
+%patch0 -p1
 
 %build
 %if %{with python2}
