@@ -17,7 +17,7 @@ Source0:	http://pypi.python.org/packages/source/k/%{module}/%{module}-%{version}
 Patch0:		unittest2.patch
 URL:		http://pypi.python.org/pypi/kombu
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.612
+BuildRequires:	rpmbuild(macros) >= 1.710
 %if %{with python2}
 BuildRequires:	python-setuptools
 %if %{with tests}
