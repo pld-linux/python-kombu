@@ -9,7 +9,7 @@
 Summary:	Messaging library for Python
 Name:		python-%{module}
 Version:	3.0.29
-Release:	3
+Release:	4
 License:	BSD-like
 Group:		Development/Languages/Python
 Source0:	http://pypi.python.org/packages/source/k/%{module}/%{module}-%{version}.tar.gz
@@ -26,9 +26,10 @@ BuildRequires:	python-modules >= 1:2.7
 BuildRequires:	python-nose
 %endif
 %if %{with doc}
+BuildRequires:	python-amqp
 BuildRequires:	python-django
 BuildRequires:	python-sphinxcontrib-issuetracker
-BuildRequires:	sphinx-pdg
+BuildRequires:	sphinx-pdg-2
 %endif
 %endif
 %if %{with python3}
@@ -36,6 +37,12 @@ BuildRequires:	python3-setuptools
 %if %{with tests}
 BuildRequires:	python3-mock
 BuildRequires:	python3-nose
+%endif
+%if %{with doc}
+BuildRequires:	python3-amqp
+BuildRequires:	python3-django
+BuildRequires:	python3-sphinxcontrib-issuetracker
+BuildRequires:	sphinx-pdg-3
 %endif
 %endif
 Requires:	python-amqp >= 1.4.7
@@ -69,6 +76,17 @@ API documentation for %{module}.
 %description apidocs -l pl.UTF-8
 Dokumentacja API %{module}.
 
+%package -n python3-%{module}-apidocs
+Summary:	%{module} API documentation
+Summary(pl.UTF-8):	Dokumentacja API %{module}
+Group:		Documentation
+
+%description -n python3-%{module}-apidocs
+API documentation for %{module}.
+
+%description -n python3-%{module}-apidocs -l pl.UTF-8
+Dokumentacja API %{module}.
+
 %prep
 %setup -q -n %{module}-%{version}
 
@@ -80,14 +98,23 @@ Dokumentacja API %{module}.
 
 %if %{with doc}
 cd docs
-PYTHONPATH=../build-2/lib %{__make} -j1 html
+PYTHONPATH=../build-2/lib %{__make} -j1 html SPHINXBUILD=sphinx-build-2
 rm -rf .build/html/_sources
+mv .build .build2
 cd ..
 %endif
 %endif
 
 %if %{with python3}
 %py3_build %{?with_tests:test}
+
+%if %{with doc}
+cd docs
+PYTHONPATH=../build-3/lib %{__make} -j1 html SPHINXBUILD=sphinx-build-3
+rm -rf .build/html/_sources
+mv .build .build3
+cd ..
+%endif
 %endif
 
 %install
@@ -106,12 +133,21 @@ rm -rf $RPM_BUILD_ROOT
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%if %{with python2}
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS Changelog FAQ LICENSE README.rst THANKS TODO
 %{py_sitescriptdir}/%{module}
 %{py_sitescriptdir}/%{module}-*.egg-info
 
+%if %{with doc}
+%files apidocs
+%defattr(644,root,root,755)
+%doc docs/.build2/html/*
+%endif
+%endif
+
+%if %{with python3}
 %files -n python3-%{module}
 %defattr(644,root,root,755)
 %doc AUTHORS Changelog FAQ LICENSE README.rst THANKS TODO
@@ -119,7 +155,8 @@ rm -rf $RPM_BUILD_ROOT
 %{py3_sitescriptdir}/%{module}-*.egg-info
 
 %if %{with doc}
-%files apidocs
+%files -n python3-%{module}-apidocs
 %defattr(644,root,root,755)
-%doc docs/.build/html/*
+%doc docs/.build3/html/*
+%endif
 %endif
