@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_without	doc	# don't build doc
+%bcond_with	doc	# build doc (uses network)
 %bcond_with	tests	# do perform tests
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
@@ -8,12 +8,12 @@
 %define 	module	kombu
 Summary:	Messaging library for Python
 Name:		python-%{module}
-Version:	3.0.29
-Release:	4
+Version:	3.0.37
+Release:	1
 License:	BSD-like
 Group:		Development/Languages/Python
-Source0:	http://pypi.python.org/packages/source/k/%{module}/%{module}-%{version}.tar.gz
-# Source0-md5:	892bf89ee247c0d16d2bdd63f1ddf4c5
+Source0:	https://pypi.python.org/packages/38/69/8d603be2df979f1b9ffefae1e51cde664c52a258aff6e8c3253032c8f2c8/%{module}-%{version}.tar.gz
+# Source0-md5:	a1901036ba5e70e6b1733f7c2d5ee313
 Patch0:		unittest2.patch
 URL:		http://pypi.python.org/pypi/kombu
 BuildRequires:	rpm-pythonprov
