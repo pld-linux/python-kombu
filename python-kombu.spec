@@ -9,7 +9,7 @@
 Summary:	Messaging library for Python
 Name:		python-%{module}
 Version:	3.0.37
-Release:	2
+Release:	3
 License:	BSD-like
 Group:		Development/Languages/Python
 Source0:	https://pypi.python.org/packages/38/69/8d603be2df979f1b9ffefae1e51cde664c52a258aff6e8c3253032c8f2c8/%{module}-%{version}.tar.gz
