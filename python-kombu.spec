@@ -8,13 +8,12 @@
 %define 	module	kombu
 Summary:	Messaging library for Python
 Name:		python-%{module}
-Version:	3.0.37
-Release:	3
+Version:	4.2.1
+Release:	1
 License:	BSD-like
 Group:		Development/Languages/Python
-Source0:	https://pypi.python.org/packages/38/69/8d603be2df979f1b9ffefae1e51cde664c52a258aff6e8c3253032c8f2c8/%{module}-%{version}.tar.gz
-# Source0-md5:	a1901036ba5e70e6b1733f7c2d5ee313
-Patch0:		unittest2.patch
+Source0:	https://files.pythonhosted.org/packages/source/k/kombu/%{module}-%{version}.tar.gz
+# Source0-md5:	15e43bdeacef6805a61e2cdee717f748
 URL:		http://pypi.python.org/pypi/kombu
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.710
@@ -89,8 +88,6 @@ Dokumentacja API %{module}.
 
 %prep
 %setup -q -n %{module}-%{version}
-
-%patch0 -p1
 
 %build
 %if %{with python2}
