@@ -9,7 +9,7 @@
 Summary:	Messaging library for Python
 Name:		python-%{module}
 Version:	4.2.1
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		Development/Languages/Python
 Source0:	https://files.pythonhosted.org/packages/source/k/kombu/%{module}-%{version}.tar.gz
