@@ -8,12 +8,13 @@
 %define 	module	kombu
 Summary:	Messaging library for Python
 Name:		python-%{module}
-Version:	4.2.1
-Release:	2
+Version:	4.6.7
+Release:	1
 License:	BSD-like
 Group:		Development/Languages/Python
-Source0:	https://files.pythonhosted.org/packages/source/k/kombu/%{module}-%{version}.tar.gz
-# Source0-md5:	15e43bdeacef6805a61e2cdee717f748
+# Source0:	https://files.pythonhosted.org/packages/source/k/kombu/%{module}-%{version}.tar.gz
+Source0:	https://pypi.debian.net/%{module}/%{module}-%{version}.tar.gz
+# Source0-md5:	7fe3e4e60926625b9a47a07e4f3ade2d
 URL:		http://pypi.python.org/pypi/kombu
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.710
@@ -133,7 +134,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python2}
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS Changelog FAQ LICENSE README.rst THANKS TODO
+%doc AUTHORS FAQ LICENSE README.rst THANKS TODO
 %{py_sitescriptdir}/%{module}
 %{py_sitescriptdir}/%{module}-*.egg-info
 
@@ -147,7 +148,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python3}
 %files -n python3-%{module}
 %defattr(644,root,root,755)
-%doc AUTHORS Changelog FAQ LICENSE README.rst THANKS TODO
+%doc AUTHORS FAQ LICENSE README.rst THANKS TODO
 %{py3_sitescriptdir}/%{module}
 %{py3_sitescriptdir}/%{module}-*.egg-info
 
