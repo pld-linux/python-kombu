@@ -9,9 +9,10 @@
 Summary:	Messaging library for Python
 Summary(pl.UTF-8):	Biblioteka komunikatów dla Pythona
 Name:		python-%{module}
+# keep 4.x here for python2 support
 Version:	4.6.11
 Release:	1
-License:	BSD-like
+License:	BSD
 Group:		Development/Languages/Python
 #Source0Download: https://pypi.org/simple/kombu/
 Source0:	https://files.pythonhosted.org/packages/source/k/kombu/%{module}-%{version}.tar.gz
