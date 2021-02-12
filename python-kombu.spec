@@ -1,52 +1,60 @@
 #
 # Conditional build:
-%bcond_with	doc	# build doc (uses network)
-%bcond_with	tests	# do perform tests
+%bcond_without	doc	# Sphinx documentation
+%bcond_without	tests	# unit tests
 %bcond_without	python2 # CPython 2.x module
 %bcond_without	python3 # CPython 3.x module
 
 %define 	module	kombu
 Summary:	Messaging library for Python
+Summary(pl.UTF-8):	Biblioteka komunikatów dla Pythona
 Name:		python-%{module}
-Version:	4.6.7
+Version:	4.6.11
 Release:	1
 License:	BSD-like
 Group:		Development/Languages/Python
-# Source0:	https://files.pythonhosted.org/packages/source/k/kombu/%{module}-%{version}.tar.gz
-Source0:	https://pypi.debian.net/%{module}/%{module}-%{version}.tar.gz
-# Source0-md5:	7fe3e4e60926625b9a47a07e4f3ade2d
-URL:		http://pypi.python.org/pypi/kombu
-BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.710
+#Source0Download: https://pypi.org/simple/kombu/
+Source0:	https://files.pythonhosted.org/packages/source/k/kombu/%{module}-%{version}.tar.gz
+# Source0-md5:	759b31d97fc11c4cb16f6d293723e85e
+URL:		https://pypi.org/project/kombu/
 %if %{with python2}
-BuildRequires:	python-setuptools
-%if %{with tests}
-BuildRequires:	python-mock
 BuildRequires:	python-modules >= 1:2.7
+BuildRequires:	python-setuptools >= 1:20.6.7
+%if %{with tests}
+BuildRequires:	python-Pyro4
+BuildRequires:	python-amqp >= 2.6.0
+BuildRequires:	python-botocore
+BuildRequires:	python-case >= 1.5.2
+BuildRequires:	python-importlib_metadata >= 0.18
 BuildRequires:	python-nose
-%endif
-%if %{with doc}
-BuildRequires:	python-amqp
-BuildRequires:	python-django
-BuildRequires:	python-sphinxcontrib-issuetracker
-BuildRequires:	sphinx-pdg-2
+BuildRequires:	python-pytest
+BuildRequires:	python-pytz
 %endif
 %endif
 %if %{with python3}
-BuildRequires:	python3-setuptools
+BuildRequires:	python3-modules >= 1:3.5
+BuildRequires:	python3-setuptools >= 1:20.6.7
 %if %{with tests}
-BuildRequires:	python3-mock
+BuildRequires:	python3-Pyro4
+BuildRequires:	python3-amqp >= 2.6.0
+BuildRequires:	python3-amqp < 2.7
+BuildRequires:	python3-botocore
+BuildRequires:	python3-case >= 1.5.2
+%if "%{py3_ver}" < "3.8"
+BuildRequires:	python3-importlib_metadata >= 0.18
+%endif
 BuildRequires:	python3-nose
 %endif
+%endif
+BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with doc}
-BuildRequires:	python3-amqp
-BuildRequires:	python3-django
-BuildRequires:	python3-sphinxcontrib-issuetracker
-BuildRequires:	sphinx-pdg-3
+BuildRequires:	python-amqp
+BuildRequires:	python-sphinx_celery
+BuildRequires:	python-sphinxcontrib-issuetracker
+BuildRequires:	sphinx-pdg-2
 %endif
-%endif
-Requires:	python-amqp >= 1.4.7
-Requires:	python-anyjson >= 0.3.3
+Requires:	python-modules >= 1:2.7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -55,64 +63,68 @@ The aim of Kombu is to make messaging in Python as easy as possible by
 providing an idiomatic high-level interface for the AMQ protocol, and
 also provide proven and tested solutions to common messaging problems.
 
+%description -l pl.UTF-8
+Celem Kombu jest jak największe ułatwienie wymiany komunikatów w
+Pythonie poprzez dostarczenie idomatycznego, wysokopoziomowego
+interfejsu do protokołu AMQ oraz sprawdzonych rozwiązań powszechnych
+problemów związanych z komunikowaniem.
+
 %package -n python3-%{module}
 Summary:	Messaging library for Python
+Summary(pl.UTF-8):	Biblioteka komunikatów dla Pythona
 Group:		Libraries/Python
-Requires:	python3-modules
+Requires:	python3-modules >= 1:3.5
 
 %description -n python3-%{module}
 The aim of Kombu is to make messaging in Python as easy as possible by
 providing an idiomatic high-level interface for the AMQ protocol, and
 also provide proven and tested solutions to common messaging problems.
 
+%description -n python3-%{module} -l pl.UTF-8
+Celem Kombu jest jak największe ułatwienie wymiany komunikatów w
+Pythonie poprzez dostarczenie idomatycznego, wysokopoziomowego
+interfejsu do protokołu AMQ oraz sprawdzonych rozwiązań powszechnych
+problemów związanych z komunikowaniem.
+
 %package apidocs
-Summary:	%{module} API documentation
-Summary(pl.UTF-8):	Dokumentacja API %{module}
+Summary:	API documentation for kombu module
+Summary(pl.UTF-8):	Dokumentacja API modułu kombu
 Group:		Documentation
+Obsoletes:	python3-kombu-apidocs < 5
 
 %description apidocs
-API documentation for %{module}.
+API documentation for kombu module.
 
 %description apidocs -l pl.UTF-8
-Dokumentacja API %{module}.
-
-%package -n python3-%{module}-apidocs
-Summary:	%{module} API documentation
-Summary(pl.UTF-8):	Dokumentacja API %{module}
-Group:		Documentation
-
-%description -n python3-%{module}-apidocs
-API documentation for %{module}.
-
-%description -n python3-%{module}-apidocs -l pl.UTF-8
-Dokumentacja API %{module}.
+Dokumentacja API modułu kombu.
 
 %prep
 %setup -q -n %{module}-%{version}
 
 %build
 %if %{with python2}
-%py_build %{?with_tests:test}
+%py_build
 
-%if %{with doc}
-cd docs
-PYTHONPATH=../build-2/lib %{__make} -j1 html SPHINXBUILD=sphinx-build-2
-rm -rf .build/html/_sources
-mv .build .build2
-cd ..
+%if %{with tests}
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+PYTEST_PLUGINS="case.pytest" \
+%{__python} -m pytest t/unit
 %endif
 %endif
 
 %if %{with python3}
-%py3_build %{?with_tests:test}
+%py3_build
+
+%if %{with tests}
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+PYTEST_PLUGINS="case.pytest" \
+%{__python3} -m pytest t/unit
+%endif
+%endif
 
 %if %{with doc}
-cd docs
-PYTHONPATH=../build-3/lib %{__make} -j1 html SPHINXBUILD=sphinx-build-3
-rm -rf .build/html/_sources
-mv .build .build3
-cd ..
-%endif
+%{__make} -C docs html \
+	SPHINXBUILD=sphinx-build-2
 %endif
 
 %install
@@ -137,12 +149,6 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS FAQ LICENSE README.rst THANKS TODO
 %{py_sitescriptdir}/%{module}
 %{py_sitescriptdir}/%{module}-*.egg-info
-
-%if %{with doc}
-%files apidocs
-%defattr(644,root,root,755)
-%doc docs/.build2/html/*
-%endif
 %endif
 
 %if %{with python3}
@@ -151,10 +157,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS FAQ LICENSE README.rst THANKS TODO
 %{py3_sitescriptdir}/%{module}
 %{py3_sitescriptdir}/%{module}-*.egg-info
+%endif
 
 %if %{with doc}
-%files -n python3-%{module}-apidocs
+%files apidocs
 %defattr(644,root,root,755)
-%doc docs/.build3/html/*
-%endif
+%doc docs/_build/html/{_modules,_static,reference,userguide,*.html,*.js}
 %endif
