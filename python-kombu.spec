@@ -3,15 +3,15 @@
 %bcond_without	doc	# Sphinx documentation
 %bcond_without	tests	# unit tests
 %bcond_without	python2 # CPython 2.x module
-%bcond_without	python3 # CPython 3.x module
+%bcond_with	python3 # CPython 3.x module
 
-%define 	module	kombu
+%define		module	kombu
 Summary:	Messaging library for Python
 Summary(pl.UTF-8):	Biblioteka komunikatów dla Pythona
 Name:		python-%{module}
 # keep 4.x here for python2 support
 Version:	4.6.11
-Release:	1
+Release:	2
 License:	BSD
 Group:		Development/Languages/Python
 #Source0Download: https://pypi.org/simple/kombu/
